@@ -20,8 +20,8 @@ Imagine that you have two type of objects: a Customer and a Store. The customer 
 
 ## Solution
 
-Add a subscription mechanism to the publisher class so individual objects can subscribe to or unsubscribe from
-This mechanism consists of:
+Add a subscription mechanism to the publisher class  
+This mechanism consists of
 * An array field to storing a list of references to subscriber objects
 * Several public methods which allow adding subscribers to and removing them from that list
 
@@ -37,93 +37,156 @@ It’s crucial that all subscribers implement the same interface  and that the p
 ## Structure
 <img src="./images/obs_structure-indexed%20(1).png">
 
-## Pseudocode
-In this example, the Observer pattern lets the text editor object notify other service objects about changes in its state
+[//]: # (## Pseudocode)
 
-<figure>
-  <img src="./images/obs_example.png">
-  <figcaption>
-      Notifying objects about events that happen to other objects.
-  </figcaption>
-</figure>
+[//]: # (In this example, the Observer pattern lets the text editor object notify other service objects about changes in its state)
 
-```
-class EventManager is
-    private field listeners: hash map of event types and listeners
+[//]: # ()
+[//]: # (<figure>)
 
-    method subscribe(eventType, listener) is
-        listeners.add(eventType, listener)
+[//]: # (  <img src="./images/obs_example.png">)
 
-    method unsubscribe(eventType, listener) is
-        listeners.remove(eventType, listener)
+[//]: # (  <figcaption>)
 
-    method notify(eventType, data) is
-        foreach (listener in listeners.of(eventType)) do
-            listener.update(data)
-            
-class Editor is
-    public field events: EventManager
-    private field file: File
+[//]: # (      Notifying objects about events that happen to other objects.)
 
-    constructor Editor() is
-        events = new EventManager()
+[//]: # (  </figcaption>)
 
-    // Methods of business logic can notify subscribers about
-    // changes.
-    method openFile(path) is
-        this.file = new File(path)
-        events.notify("open", file.name)
+[//]: # (</figure>)
 
-    method saveFile() is
-        file.write()
-        events.notify("save", file.name)
-        
-interface EventListener is
-    method update(filename)
-    
-class LoggingListener implements EventListener is
-    private field log: File
-    private field message: string
+[//]: # ()
+[//]: # (```)
 
-    constructor LoggingListener(log_filename, message) is
-        this.log = new File(log_filename)
-        this.message = message
+[//]: # (class EventManager is)
 
-    method update(filename) is
-        log.write(replace('%s',filename,message))
-        
-class EmailAlertsListener implements EventListener is
-    private field email: string
-    private field message: string
+[//]: # (    private field listeners: hash map of event types and listeners)
 
-    constructor EmailAlertsListener(email, message) is
-        this.email = email
-        this.message = message
+[//]: # ()
+[//]: # (    method subscribe&#40;eventType, listener&#41; is)
 
-    method update(filename) is
-        system.email(email, replace('%s',filename,message))
-        
-class Application is
-    method config() is
-        editor = new Editor()
+[//]: # (        listeners.add&#40;eventType, listener&#41;)
 
-        logger = new LoggingListener(
-            "/path/to/log.txt",
-            "Someone has opened the file: %s")
-        editor.events.subscribe("open", logger)
+[//]: # ()
+[//]: # (    method unsubscribe&#40;eventType, listener&#41; is)
 
-        emailAlerts = new EmailAlertsListener(
-            "admin@example.com",
-            "Someone has changed the file: %s")
-        editor.events.subscribe("save", emailAlerts)
+[//]: # (        listeners.remove&#40;eventType, listener&#41;)
 
-```
+[//]: # ()
+[//]: # (    method notify&#40;eventType, data&#41; is)
 
-## Applicability
+[//]: # (        foreach &#40;listener in listeners.of&#40;eventType&#41;&#41; do)
 
-* Use the Observer pattern when changes to the state of one object may require changing other objects, and the actual set of objects is unknown beforehand or changes dynamically.
+[//]: # (            listener.update&#40;data&#41;)
 
-*  Use the pattern when some objects in your app must observe others, but only for a limited time or in specific cases.
+[//]: # (            )
+[//]: # (class Editor is)
+
+[//]: # (    public field events: EventManager)
+
+[//]: # (    private field file: File)
+
+[//]: # ()
+[//]: # (    constructor Editor&#40;&#41; is)
+
+[//]: # (        events = new EventManager&#40;&#41;)
+
+[//]: # ()
+[//]: # (    // Methods of business logic can notify subscribers about)
+
+[//]: # (    // changes.)
+
+[//]: # (    method openFile&#40;path&#41; is)
+
+[//]: # (        this.file = new File&#40;path&#41;)
+
+[//]: # (        events.notify&#40;"open", file.name&#41;)
+
+[//]: # ()
+[//]: # (    method saveFile&#40;&#41; is)
+
+[//]: # (        file.write&#40;&#41;)
+
+[//]: # (        events.notify&#40;"save", file.name&#41;)
+
+[//]: # (        )
+[//]: # (interface EventListener is)
+
+[//]: # (    method update&#40;filename&#41;)
+
+[//]: # (    )
+[//]: # (class LoggingListener implements EventListener is)
+
+[//]: # (    private field log: File)
+
+[//]: # (    private field message: string)
+
+[//]: # ()
+[//]: # (    constructor LoggingListener&#40;log_filename, message&#41; is)
+
+[//]: # (        this.log = new File&#40;log_filename&#41;)
+
+[//]: # (        this.message = message)
+
+[//]: # ()
+[//]: # (    method update&#40;filename&#41; is)
+
+[//]: # (        log.write&#40;replace&#40;'%s',filename,message&#41;&#41;)
+
+[//]: # (        )
+[//]: # (class EmailAlertsListener implements EventListener is)
+
+[//]: # (    private field email: string)
+
+[//]: # (    private field message: string)
+
+[//]: # ()
+[//]: # (    constructor EmailAlertsListener&#40;email, message&#41; is)
+
+[//]: # (        this.email = email)
+
+[//]: # (        this.message = message)
+
+[//]: # ()
+[//]: # (    method update&#40;filename&#41; is)
+
+[//]: # (        system.email&#40;email, replace&#40;'%s',filename,message&#41;&#41;)
+
+[//]: # (        )
+[//]: # (class Application is)
+
+[//]: # (    method config&#40;&#41; is)
+
+[//]: # (        editor = new Editor&#40;&#41;)
+
+[//]: # ()
+[//]: # (        logger = new LoggingListener&#40;)
+
+[//]: # (            "/path/to/log.txt",)
+
+[//]: # (            "Someone has opened the file: %s"&#41;)
+
+[//]: # (        editor.events.subscribe&#40;"open", logger&#41;)
+
+[//]: # ()
+[//]: # (        emailAlerts = new EmailAlertsListener&#40;)
+
+[//]: # (            "admin@example.com",)
+
+[//]: # (            "Someone has changed the file: %s"&#41;)
+
+[//]: # (        editor.events.subscribe&#40;"save", emailAlerts&#41;)
+
+[//]: # ()
+[//]: # (```)
+
+[//]: # ()
+[//]: # (## Applicability)
+
+[//]: # ()
+[//]: # (* Use the Observer pattern when changes to the state of one object may require changing other objects, and the actual set of objects is unknown beforehand or changes dynamically.)
+
+[//]: # ()
+[//]: # (*  Use the pattern when some objects in your app must observe others, but only for a limited time or in specific cases.)
 
 
 ## Pros and Cons
